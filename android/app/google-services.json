@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "526329580645",
+    "project_id": "unipasaj-a4caa",
+    "storage_bucket": "unipasaj-a4caa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526329580645:android:7bc6cd893e18d9f9168a8c",
+        "android_client_info": {
+          "package_name": "com.example.unipasaj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3YjpXtHet7SNVfbL7qYiavZpvnbgHC0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
