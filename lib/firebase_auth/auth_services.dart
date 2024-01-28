@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 class FirebaseAuthService {
 
   final Logger _logger = Logger('FirebaseAuthService');
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<User?> signUpWithEmailAndPassword(String email, String password) async {
     try {

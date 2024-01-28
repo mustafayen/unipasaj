@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:unipasaj/firebase_auth/auth_services.dart';
+import 'package:unipasaj/login.dart';
 
 class AyarlarEkrani extends StatefulWidget {
   @override
@@ -75,6 +76,7 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
                       ),
                       onTap: () async{
                         FirebaseAuth.instance.signOut();
+                        Navigator.push(context, MaterialPageRoute(builder: (content) => LoggedInWidget()));
                       },
                       trailing: Icon(Icons.navigate_next)),
                   //  Divider(),
