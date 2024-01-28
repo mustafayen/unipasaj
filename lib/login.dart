@@ -171,6 +171,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
                         ),
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 15),
                       child: TextFormField(

@@ -8,8 +8,14 @@ class FirebaseAuthService {
 
   Future<User?> signUpWithEmailAndPassword(String email, String password) async {
     try {
-      UserCredential credential =
-      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential credential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Send email verification
+      await credential.user?.sendEmailVerification();
+      _logger.info('Verification email sent to ${credential.user?.email}');
+
       return credential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
