@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:unipasaj/firebase_auth/auth_services.dart';
 
 class AyarlarEkrani extends StatefulWidget {
   @override
@@ -71,7 +73,9 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onTap: () {},
+                      onTap: () async{
+                        FirebaseAuth.instance.signOut();
+                      },
                       trailing: Icon(Icons.navigate_next)),
                   //  Divider(),
                 ],
