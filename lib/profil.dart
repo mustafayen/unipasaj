@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:unipasaj/class/markaClass.dart';
 import 'package:unipasaj/firebase_auth/auth_services.dart';
 import 'package:unipasaj/firebase_auth/sign_in_provider.dart';
+import 'package:unipasaj/lists/markaList.dart';
 import 'package:unipasaj/login.dart';
 
 class AyarlarEkrani extends StatefulWidget {
@@ -148,4 +151,5 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
       ),
     );
   }
+
 }

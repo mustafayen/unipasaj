@@ -125,7 +125,7 @@ Card markaCard(String imageurl, String marka, String indirim, String bilgi,
         ),
         ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Colors.black, // Burada renk değiştirebilirsiniz
+              backgroundColor: Colors.black, // Burada renk değiştirebilirsiniz
             ),
             onPressed: () {
               print("object");

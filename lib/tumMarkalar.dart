@@ -5,15 +5,28 @@ import 'class/markaClass.dart';
 import 'lists/markaList.dart';
 
 class TumMarkalar extends StatefulWidget {
+  final List<Marka> markalar; // markalar isimli parametre eklendi
+  TumMarkalar({required this.markalar}); // Yapılandırıcı metot güncellendi
+
   @override
   _TumMarkalarState createState() => _TumMarkalarState();
 }
 
 class _TumMarkalarState extends State<TumMarkalar> {
   TextEditingController searchController = TextEditingController();
-  List<Marka> markaList = allmarkaList;
+  List<Marka> markaList = []; // markaList, widget.markalar ile güncellenecek
   String searchText = "";
   Set<String> kategoriler = Set();
+
+  @override
+  void initState() {
+    super.initState();
+    markaList = widget.markalar; // markaList, widget.markalar ile güncellendi
+    for (Marka marka in widget.markalar) {
+      kategoriler.add('Hepsi');
+      kategoriler.add(marka.kategori);
+    }
+  }
 
   // List<String> kategoriler = [];
 

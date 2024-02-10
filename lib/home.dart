@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:unipasaj/lists/markaList.dart';
 import 'favoriMarkalar.dart';
 import 'profil.dart';
 import 'tumMarkalar.dart';
@@ -14,19 +15,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 1;
-  late List<Widget> _pages;
+  late List<Widget> _pages = [];
 
   @override
   void initState() {
     super.initState();
-    // Initialize _pages here where you can access widget.user
-    _pages = [
-      //HomeTab(),
-      ExploreTab(),
-      TumMarkalar(),
-      AyarlarEkrani(user: widget.user),
-    ];
+    fetchMarkalarFromFirestore().then((markalar) {
+      setState(() {
+        _pages = [
+          ExploreTab(),
+          TumMarkalar(markalar: markalar),
+          AyarlarEkrani(user: widget.user),
+        ];
+      });
+    });
   }
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -37,13 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: _pages.isEmpty ? Center(child: CircularProgressIndicator()) : _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.school_outlined, color: Colors.black),
-          //   label: 'Eğitim',
-          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite_border, color: Colors.black),
             label: 'Favorilerim',
