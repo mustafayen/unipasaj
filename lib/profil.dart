@@ -1,9 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:unipasaj/firebase_auth/auth_services.dart';
+import 'package:unipasaj/firebase_auth/sign_in_provider.dart';
 import 'package:unipasaj/login.dart';
 
 class AyarlarEkrani extends StatefulWidget {
+  final User user;
+  AyarlarEkrani({required this.user});
+
   @override
   _AyarlarEkraniState createState() => _AyarlarEkraniState();
 }
@@ -39,7 +44,7 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
                 children: [
                   ListTile(
                       title: Text(
-                        "ÜNİPASAJ iD",
+                        "ÜNİPASAJ iD: ${widget.user.uid}", // Accessing widget.user.uid here
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -74,9 +79,13 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onTap: () async{
-                        FirebaseAuth.instance.signOut();
-                        Navigator.push(context, MaterialPageRoute(builder: (content) => LoggedInWidget()));
+                      onTap: () {
+                        final provider = Provider.of<EmailSignInProvider>(
+                            context, listen: false);
+                        provider.signOut();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoggedInWidget()));
                       },
                       trailing: Icon(Icons.navigate_next)),
                   //  Divider(),

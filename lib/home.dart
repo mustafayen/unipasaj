@@ -1,24 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'favoriMarkalar.dart';
 import 'profil.dart';
 import 'tumMarkalar.dart';
 
 class MyHomePage extends StatefulWidget {
+  final User user;
+  MyHomePage({required this.user});
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 1;
+  late List<Widget> _pages;
 
-  // Define the pages or tabs for your app
-  final List<Widget> _pages = [
-    //HomeTab(),
-    ExploreTab(),
-    TumMarkalar(),
-    AyarlarEkrani(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    // Initialize _pages here where you can access widget.user
+    _pages = [
+      //HomeTab(),
+      ExploreTab(),
+      TumMarkalar(),
+      AyarlarEkrani(user: widget.user),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
