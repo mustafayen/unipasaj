@@ -116,45 +116,54 @@ Card markaCard(String imageurl, String marka, String indirim, String bilgi,
             ),
           ],
         ),
-        Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-        SizedBox(
-          child: Image.asset(
-            imageurl,
-            width: double.infinity,
-          ),
-        ),
-        ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black, // Burada renk değiştirebilirsiniz
+            Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+            SizedBox(
+              child: Image.asset(
+                imageurl,
+                width: double.infinity,
+              ),
             ),
-            onPressed: () {
-              print("object");
-              showModalBottomSheet(
-                context: context,
-                builder: (BuildContext context) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          //QrImage(
-                            //data: "OZKOC10",
-                            //version: QrVersions.auto,
-                            //size: 200.0,
-                          //),
-                          SizedBox(height: 20),
-                          Text("Yukarıdaki QR Kodu Tarat"),
-                        ],
-
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-            child: Text('Kupon Kodu Al'))
-      ])),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                  ),
+                  onPressed: () {
+                    print("Kupon Kodu Al");
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                // Buraya QR kodu widget'i eklenebilir
+                                SizedBox(height: 20),
+                                Text("Yukarıdaki QR Kodu Tarat"),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Text('Kupon Kodu Al'),
+                ),
+                IconButton(
+                  onPressed: () {
+                    // Harita butonunun işlevselliği buraya gelecek
+                  },
+                  icon: Icon(Icons.map),
+                ),
+              ],
+            ),
+          ],
+          ),
+      ),
     ),
   );
 }

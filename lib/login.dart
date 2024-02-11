@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:unipasaj/firebase_auth/auth_services.dart';
@@ -231,6 +232,13 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
    if(user!=null){
+
+     await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
+       'name': name,
+       'email': email,
+       // Diğer kullanıcı bilgilerini buraya ekleyebilirsiniz
+     });
+
       print("User is successfully created");
       Navigator.push(
         context,
