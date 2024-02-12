@@ -1,121 +1,136 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'paddings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-Card markaCard(String imageurl, String marka, String indirim, String bilgi,
-    String tarih, String logoUrl, String kategori, context) {
+// FirebaseAuth nesnesini oluşturun
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+// FirebaseAuth kullanarak mevcut kullanıcıyı alın
+final User? user = _auth.currentUser;
+
+// Mevcut kullanıcının UID'sini alın
+final String? userId = user?.uid;
+
+Card markaCard(
+    String imageurl,
+    String marka,
+    String indirim,
+    String bilgi,
+    String tarih,
+    String logoUrl,
+    String kategori,
+    int id,
+    context,
+    Function(String, int) addFavoriFunction, // Yeni parametre
+    ) {
   bool isFavorited = false;
   Icon favIcon = Icon(Icons.favorite_border, color: Colors.black);
   return Card(
     child: Container(
       child: Center(
-          child: Column(children: [
-        verticalPaddingTen(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
-            ClipOval(
-              child: Container(
-                width: 50, // Çemberin çapı
-                height: 50, // Çemberin çapı
-                color: Colors.blue, // Çember rengi
-                child: Center(
-                  child: Image.asset(
-                    logoUrl, // Kullanmak istediğiniz profil resminin yolunu belirtin.
-                    width: 50, // Resmin genişliği
-                    height: 50, // Resmin yüksekliği
-                    fit: BoxFit
-                        .fill, // Resmi çember içine sığdırmak için kullanılan özellik
+            verticalPaddingTen(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ClipOval(
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    color: Colors.blue,
+                    child: Center(
+                      child: Image.asset(
+                        logoUrl,
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                verhorPadding(),
+                Text(
+                  marka,
+                  style: TextStyle(
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Spacer(),
+                IconButton(
+                  icon: isFavorited
+                      ? Icon(Icons.favorite, color: Colors.red)
+                      : Icon(Icons.favorite_border, color: Colors.black),
+                  onPressed: () {
+                    // IconButton'a tıklandığında favori ekleme fonksiyonunu çağır
+                    addFavoriFunction(userId!, id); // Yeni fonksiyon kullanımı
+                  },
+                ),
+                Text(id.toString()),
+              ],
             ),
             verhorPadding(),
             Text(
-              marka,
+              bilgi,
+              textAlign: TextAlign.left,
               style: TextStyle(
-                fontSize: 17.0,
+                fontSize: 14.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Spacer(),
-            IconButton(
-              icon: isFavorited
-                  // ignore: dead_code
-                  ? Icon(Icons.favorite, color: Colors.red)
-                  : Icon(Icons.favorite_border, color: Colors.black),
-              onPressed: () {
-                isFavorited = !isFavorited;
-              },
-            ),
-          ],
-        ),
-        verhorPadding(),
-        Text(
-          bilgi,
-          textAlign: TextAlign.left,
-          style: TextStyle(
-            fontSize: 14.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        verticalPaddingTen(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+            verticalPaddingTen(),
             Row(
-              children: <Widget>[
-                Icon(
-                  Icons.percent,
-                  color: Colors.black,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.percent,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8.0),
+                    Text(
+                      indirim,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                    width:
-                        8.0), // İkinci öğe ile aralarında boşluk bırakmak için SizedBox ekleyebilirsiniz.
-                Text(
-                  indirim, // Metin içeriği
-                  style: TextStyle(
-                    fontSize: 16.0, // Metin boyutu
-                  ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.tag,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8.0),
+                    Text(
+                      kategori,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.date_range,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 8.0),
+                    Text(
+                      tarih,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            Row(
-              children: <Widget>[
-                Icon(
-                  Icons.tag,
-                  color: Colors.black,
-                ),
-                SizedBox(
-                    width:
-                        8.0), // İkinci öğe ile aralarında boşluk bırakmak için SizedBox ekleyebilirsiniz.
-                Text(
-                  kategori, // Metin içeriği
-                  style: TextStyle(
-                    fontSize: 16.0, // Metin boyutu
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Icon(
-                  Icons.date_range,
-                  color: Colors.black,
-                ),
-                SizedBox(
-                    width:
-                        8.0), // İkinci öğe ile aralarında boşluk bırakmak için SizedBox ekleyebilirsiniz.
-                Text(
-                  tarih, // Metin içeriği
-                  style: TextStyle(
-                    fontSize: 16.0, // Metin boyutu
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
             Padding(padding: EdgeInsets.symmetric(vertical: 10)),
             SizedBox(
               child: Image.asset(
@@ -162,7 +177,7 @@ Card markaCard(String imageurl, String marka, String indirim, String bilgi,
               ],
             ),
           ],
-          ),
+        ),
       ),
     ),
   );

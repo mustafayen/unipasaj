@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'widgets/cards.dart';
 import 'class/markaClass.dart';
 import 'lists/markaList.dart';
@@ -18,14 +19,116 @@ class _TumMarkalarState extends State<TumMarkalar> {
   String searchText = "";
   Set<String> kategoriler = Set();
 
+  late List<Marka> favoriMarkalar = [];
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late User? user;
+  late String? userId;
+
   @override
   void initState() {
     super.initState();
+    fetchUserData();
     markaList = widget.markalar; // markaList, widget.markalar ile güncellendi
     for (Marka marka in widget.markalar) {
       kategoriler.add('Hepsi');
       kategoriler.add(marka.kategori);
     }
+  }
+
+  void fetchUserData() async {
+    user = _auth.currentUser;
+    if (user != null) {
+      // Mevcut kullanıcının UID'sini al
+      userId = user!.uid;
+    }
+  }
+
+  Future<List<Marka>> fetchFavoriMarkalarFromFirestore(String userId) async {
+    List<Marka> favoriMarkalar = [];
+
+    try {
+      // Firestore kullanıcı favori markaları koleksiyon referansını alın
+      CollectionReference userFavoriCollection = FirebaseFirestore.instance.collection('favori');
+
+      // Kullanıcının favori markalarını Firestore'dan al
+      QuerySnapshot querySnapshot = await userFavoriCollection.doc(userId).collection('favori_markalar').get();
+
+      // Her belgeyi döngüye alarak favori marka nesnelerini oluştur
+      querySnapshot.docs.forEach((doc) {
+        Marka marka = Marka(
+          doc['id'],
+          doc['imagePath'],
+          doc['name'],
+          doc['discount'],
+          doc['description'],
+          doc['date'],
+          doc['logoPath'],
+          doc['kategori'],
+        );
+        favoriMarkalar.add(marka);
+      });
+
+      return favoriMarkalar;
+    } catch (e) {
+      print("Favori markaları çekerken hata oluştu: $e");
+      return favoriMarkalar;
+    }
+  }
+
+  void addFavoriListToFirestore(String userId, int id) async {
+    // Favori markaları Firestore'dan al
+    List<Marka> favoriMarkalar = await fetchFavoriMarkalarFromFirestore(userId);
+
+    // Firestore'dan gelen verilerle markaları al
+    List<Marka> markalarFromFirestore = await fetchMarkalarFromFirestore();
+    List<Marka> allmarkaList = markalarFromFirestore;
+
+    // Firestore kullanıcı favori markaları koleksiyon referansını alın
+    CollectionReference userFavoriCollection = FirebaseFirestore.instance.collection('favori');
+
+    // Marka zaten favorilere eklenmişse işlemi sonlandır
+    if (isMarkaAlreadyFavorited(favoriMarkalar, id)) {
+      print('Bu marka zaten favorilere eklenmiş.');
+      return;
+    }
+
+    // Favorilere eklemek için marka verilerini bul
+    Marka? markaToAdd;
+    for (var marka in allmarkaList) {
+      if (marka.id == id) {
+        markaToAdd = marka;
+        break;
+      }
+    }
+
+    if (markaToAdd != null) {
+      // Marka verilerini bir belgeye dönüştürün
+      Map<String, dynamic> markaData = {
+        'id': markaToAdd.id,
+        'imagePath': markaToAdd.imagePath,
+        'name': markaToAdd.name,
+        'discount': markaToAdd.discount,
+        'description': markaToAdd.description,
+        'date': markaToAdd.date,
+        'logoPath': markaToAdd.logoPath,
+        'kategori': markaToAdd.kategori,
+      };
+
+      // Kullanıcının favori markaları koleksiyonuna yeni bir belge ekleyin
+      userFavoriCollection.doc(userId).collection('favori_markalar').add(markaData)
+          .then((value) {
+        print("Marka başarıyla eklendi.");
+      })
+          .catchError((error) {
+        print("Marka eklenirken hata oluştu: $error");
+      });
+    } else {
+      print('Marka bulunamadı.');
+    }
+  }
+
+  bool isMarkaAlreadyFavorited(List<Marka> favoriMarkalar, int id) {
+    return favoriMarkalar.any((marka) => marka.id == id);
   }
 
   // List<String> kategoriler = [];
@@ -123,6 +226,9 @@ class _TumMarkalarState extends State<TumMarkalar> {
 
   Widget markaCard1(Marka marka) {
     return markaCard(marka.imagePath, marka.name, marka.discount,
-        marka.description, marka.date, marka.logoPath, marka.kategori, context);
+        marka.description, marka.date, marka.logoPath, marka.kategori, marka.id, context, (userId, id) {
+        addFavoriListToFirestore(userId, id);
+      },);
   }
+
 }
