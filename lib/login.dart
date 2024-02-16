@@ -231,7 +231,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
-   if(user!=null){
+   if(user!=null && name!=""){
 
      await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
        'name': name,
@@ -240,6 +240,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
      });
 
       print("User is successfully created");
+
       Navigator.push(
         context,
         PageRouteBuilder(
@@ -262,9 +263,28 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
               1), // Set the duration here (1 second in this example)
         ),
       );
+
     }
     else{
-      print("error");
+     showDialog(
+       context: context,
+       builder: (BuildContext context) {
+         return AlertDialog(
+           title: Text("Sign-Up Failed"),
+           content: Text("Varolan bir hesap ile kayıt olmaya çalıştınız ya da internet bağlantısı yok. Tekrar deneyiniz."),
+           actions: [
+             TextButton(
+               onPressed: () {
+                 Navigator.pop(context);
+               },
+               child: Text("OK"),
+             ),
+           ],
+         );
+       },
+     );
+     _emailController.text = "";
+     _passwordController.text = "";
     }
   }
 
