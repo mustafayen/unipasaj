@@ -131,8 +131,6 @@ class _TumMarkalarState extends State<TumMarkalar> {
     return favoriMarkalar.any((marka) => marka.id == id);
   }
 
-  // List<String> kategoriler = [];
-
   @override
   Widget build(BuildContext context) {
     for (Marka marka in allmarkaList) {

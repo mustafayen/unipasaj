@@ -70,57 +70,34 @@ class _ExploreTabState extends State<ExploreTab> {
     }
   }
 
-  void addFavoriListToFirestore(String userId, int id) async {
-    // Firestore'dan gelen verilerle markaları al
-    List<Marka> markalarFromFirestore = await fetchMarkalarFromFirestore();
-    List<Marka> allmarkaList = markalarFromFirestore;
 
-    // Firestore kullanıcı favori markaları koleksiyon referansını alın
-    CollectionReference userFavoriCollection = FirebaseFirestore.instance.collection('favori');
+  Future removeFavoriListFromFirestore(String userId, int id) async {
+    try {
+      // Firestore kullanıcı favori markaları koleksiyon referansını alın
+      CollectionReference userFavoriCollection = FirebaseFirestore.instance.collection('favori');
 
-    // Marka zaten favorilere eklenmişse işlemi sonlandır
-    if (isMarkaAlreadyFavorited(favoriMarkalar, id)) {
-      print('Bu marka zaten favorilere eklenmiş.');
-      return;
-    }
-
-    // Favorilere eklemek için marka verilerini bul
-    Marka? markaToAdd;
-    for (var marka in allmarkaList) {
-      if (marka.id == id) {
-        markaToAdd = marka;
-        break;
-      }
-    }
-
-    if (markaToAdd != null) {
-      // Marka verilerini bir belgeye dönüştürün
-      Map<String, dynamic> markaData = {
-        'id': markaToAdd.id,
-        'imagePath': markaToAdd.imagePath,
-        'name': markaToAdd.name,
-        'discount': markaToAdd.discount,
-        'description': markaToAdd.description,
-        'date': markaToAdd.date,
-        'logoPath': markaToAdd.logoPath,
-        'kategori': markaToAdd.kategori,
-      };
-
-      // Kullanıcının favori markaları koleksiyonuna yeni bir belge ekleyin
-      userFavoriCollection.doc(userId).collection('favori_markalar').add(markaData)
-          .then((value) {
-        print("Marka başarıyla eklendi.");
-      })
-          .catchError((error) {
-        print("Marka eklenirken hata oluştu: $error");
+      // Koleksiyondan markayı kaldır
+      await userFavoriCollection
+          .doc(userId)
+          .collection('favori_markalar')
+          .where('id', isEqualTo: id)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          doc.reference.delete();
+          print("Marka favorilerden kaldırıldı.");
+        });
+      }).catchError((error) {
+        print("Marka kaldırılırken hata oluştu: $error");
       });
-    } else {
-      print('Marka bulunamadı.');
-    }
-  }
 
-  bool isMarkaAlreadyFavorited(List<Marka> favoriMarkalar, int id) {
-    return favoriMarkalar.any((marka) => marka.id == id);
+      // Favori markalar listesinden markayı kaldır
+      setState(() {
+        favoriMarkalar.removeWhere((marka) => marka.id == id);
+      });
+    } catch (e) {
+      print("Favori markaları kaldırırken hata oluştu: $e");
+    }
   }
 
   @override
@@ -152,7 +129,7 @@ class _ExploreTabState extends State<ExploreTab> {
                   context,
                       (userId, id) {
                     // Favori ekleme işlevini tanımla
-                    addFavoriListToFirestore(userId, id);
+                        removeFavoriListFromFirestore(userId, id);
                   },
                 );
               }).toList(),
