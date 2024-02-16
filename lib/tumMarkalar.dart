@@ -224,7 +224,7 @@ class _TumMarkalarState extends State<TumMarkalar> {
 
   Widget markaCard1(Marka marka) {
     return markaCard(marka.imagePath, marka.name, marka.discount,
-        marka.description, marka.date, marka.logoPath, marka.kategori, marka.id, context, (userId, id) {
+        marka.description, marka.date, marka.logoPath, marka.kategori, marka.id, Colors.black, context, (userId, id) {
         addFavoriListToFirestore(userId, id);
       },);
   }

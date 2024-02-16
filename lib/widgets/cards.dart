@@ -21,6 +21,7 @@ Card markaCard(
     String logoUrl,
     String kategori,
     int id,
+    Color mycolor,
     context,
     Function(String, int) addFavoriFunction, // Yeni parametre
     ) {
@@ -60,9 +61,7 @@ Card markaCard(
                 ),
                 Spacer(),
                 IconButton(
-                  icon: isFavorited
-                      ? Icon(Icons.favorite, color: Colors.red)
-                      : Icon(Icons.favorite_border, color: Colors.black),
+                  icon: Icon(Icons.favorite, color: mycolor),
                   onPressed: () {
                     // IconButton'a tıklandığında favori ekleme fonksiyonunu çağır
                     addFavoriFunction(userId!, id); // Yeni fonksiyon kullanımı
