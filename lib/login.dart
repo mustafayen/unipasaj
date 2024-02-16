@@ -23,6 +23,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
   final FirebaseAuthService _auth = FirebaseAuthService();
 
   TextEditingController _nameController = TextEditingController();
+  TextEditingController _surnameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -152,10 +153,27 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
                           ),
                           filled: true,
                           fillColor: Colors.green[100], // Set your desired background color here
-                          labelText: "Ad Soyad",
+                          labelText: "İsim",
                         ),
                       ),
                     ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
+                      child: TextFormField(
+                        controller: _surnameController,
+                        autofillHints: [AutofillHints.name],
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0), // Set the border radius
+                          ),
+                          filled: true,
+                          fillColor: Colors.green[100], // Set your desired background color here
+                          labelText: "Soyisim",
+                        ),
+                      ),
+                    ),
+
                     Padding(
                       padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
                       child: TextFormField(
@@ -195,7 +213,10 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
                           color: Colors.amberAccent,
                           borderRadius: BorderRadius.circular(20)),
                       child: ElevatedButton(
-                        onPressed: _signUp,
+                        onPressed: () {
+                          if (_nameController.text !="" && _surnameController.text !="") {
+                            _signUp();
+                          }},
                         child: Text(
                           'Kayıt Ol',
                           style: TextStyle(color: Colors.white, fontSize: 25),
@@ -226,15 +247,17 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
 
   void _signUp()async{
     String name= _nameController.text;
+    String surname= _surnameController.text;
     String email= _emailController.text;
     String password= _passwordController.text;
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
-   if(user!=null && name!=""){
+   if(user!=null){
 
      await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
        'name': name,
+       'surname': surname,
        'email': email,
        // Diğer kullanıcı bilgilerini buraya ekleyebilirsiniz
      });
