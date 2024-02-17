@@ -105,31 +105,31 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
                       ),
                     ),
 
-                    Container(
-                      height: 50,
-                      width: 250,
-                      decoration: BoxDecoration(
-                          color: Colors.amberAccent,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: ElevatedButton(
-                        onPressed: _signIn,
-                        child: Text(
-                          'Giriş',
-                          style: TextStyle(color: Colors.white, fontSize: 25),
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                                (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.pressed)) {
-                                // Color when the button is pressed
-                                return Colors.amberAccent.withOpacity(0.5); // Adjust the opacity as needed
-                              }
-                              // Color for other states (e.g., normal)
-                              return Colors.amberAccent;
-                            },
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: _signIn,
+                          child: Text(
+                            'Giriş',
+                            style: TextStyle(color: Colors.white, fontSize: 25),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.pressed)) {
+                                  // Color when the button is pressed
+                                  return Colors.amberAccent.withOpacity(0.5); // Adjust the opacity as needed
+                                }
+                                // Color for other states (e.g., normal)
+                                return Colors.amberAccent;
+                              },
+                            ),
                           ),
                         ),
-                      ),
+
+                        TextButton(onPressed: resetPassword,
+                            child: Text("Şifremi unuttum\n(Email adresinizi yazıp tıklayınız)")),
+                      ],
                     ),
                   ],
                 ),
@@ -254,16 +254,13 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
     if(user!=null){
-
       await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
         'name': name,
         'surname': surname,
         'email': email,
         // Diğer kullanıcı bilgilerini buraya ekleyebilirsiniz
       });
-
       print("User is successfully created");
-
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
@@ -306,7 +303,6 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
   void _signIn() async {
     String email = _emailController.text;
     String password = _passwordController.text;
-
     User? user = await _auth.signInWithEmailAndPassword(email, password);
 
     if (user != null) {
@@ -352,4 +348,16 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
   }
 
 
+  Future resetPassword() async{
+    await FirebaseAuth.instance.
+    sendPasswordResetEmail(email: _emailController.text.trim());
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Şifre yenileme linki gönderildi'),
+      ),
+    );
+  }
+
 }
+

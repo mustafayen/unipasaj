@@ -3,12 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unipasaj/firebase_auth/sign_in_provider.dart';
 import 'package:unipasaj/login.dart';
-import 'package:unipasaj/widgets/cards.dart';
 
 class AyarlarEkrani extends StatefulWidget {
-  //final User user;
-  //AyarlarEkrani({required this.user});
-
   @override
   _AyarlarEkraniState createState() => _AyarlarEkraniState();
 }
@@ -29,7 +25,6 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
   void fetchUserData() async {
     user = _auth.currentUser;
     if (user != null) {
-      // Mevcut kullanıcının UID'sini al
       userId = user!.uid;
     }
   }
@@ -107,7 +102,7 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
                         final provider = Provider.of<EmailSignInProvider>(
                             context, listen: false);
                         provider.signOut();
-                        Navigator.push(
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) => LoggedInWidget()));
                       },
@@ -162,8 +157,7 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
                       trailing: Text(
                         "1.0.0",
                         style: TextStyle(color: Colors.grey),
-                      )),
-                  //  Divider(),
+                      ),),
                 ],
               ),
             )
@@ -172,5 +166,4 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
       ),
     );
   }
-
 }

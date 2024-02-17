@@ -40,7 +40,6 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     setState(() {
       isEmailVerified=FirebaseAuth.instance.currentUser!.emailVerified;
     });
-
     if(isEmailVerified) timer?.cancel();
   }
 
@@ -75,5 +74,4 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
             ),
           ),
       );
-
 }

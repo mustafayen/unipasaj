@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logging/logging.dart';
 
 class FirebaseAuthService {
-
   final Logger _logger = Logger('FirebaseAuthService');
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -12,7 +11,6 @@ class FirebaseAuthService {
         email: email,
         password: password,
       );
-
       return credential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {

@@ -8,7 +8,6 @@ import 'lists/markaList.dart';
 class TumMarkalar extends StatefulWidget {
   final List<Marka> markalar; // markalar isimli parametre eklendi
   TumMarkalar({required this.markalar}); // Yapılandırıcı metot güncellendi
-
   @override
   _TumMarkalarState createState() => _TumMarkalarState();
 }
@@ -49,10 +48,8 @@ class _TumMarkalarState extends State<TumMarkalar> {
     try {
       // Firestore kullanıcı favori markaları koleksiyon referansını alın
       CollectionReference userFavoriCollection = FirebaseFirestore.instance.collection('favori');
-
       // Kullanıcının favori markalarını Firestore'dan al
       QuerySnapshot querySnapshot = await userFavoriCollection.doc(userId).collection('favori_markalar').get();
-
       // Her belgeyi döngüye alarak favori marka nesnelerini oluştur
       querySnapshot.docs.forEach((doc) {
         Marka marka = Marka(
@@ -78,20 +75,16 @@ class _TumMarkalarState extends State<TumMarkalar> {
   void addFavoriListToFirestore(String userId, int id) async {
     // Favori markaları Firestore'dan al
     List<Marka> favoriMarkalar = await fetchFavoriMarkalarFromFirestore(userId);
-
     // Firestore'dan gelen verilerle markaları al
     List<Marka> markalarFromFirestore = await fetchMarkalarFromFirestore();
     List<Marka> allmarkaList = markalarFromFirestore;
-
     // Firestore kullanıcı favori markaları koleksiyon referansını alın
     CollectionReference userFavoriCollection = FirebaseFirestore.instance.collection('favori');
-
     // Marka zaten favorilere eklenmişse işlemi sonlandır
     if (isMarkaAlreadyFavorited(favoriMarkalar, id)) {
       print('Bu marka zaten favorilere eklenmiş.');
       return;
     }
-
     // Favorilere eklemek için marka verilerini bul
     Marka? markaToAdd;
     for (var marka in allmarkaList) {
@@ -100,7 +93,6 @@ class _TumMarkalarState extends State<TumMarkalar> {
         break;
       }
     }
-
     if (markaToAdd != null) {
       // Marka verilerini bir belgeye dönüştürün
       Map<String, dynamic> markaData = {
@@ -113,7 +105,6 @@ class _TumMarkalarState extends State<TumMarkalar> {
         'logoPath': markaToAdd.logoPath,
         'kategori': markaToAdd.kategori,
       };
-
       // Kullanıcının favori markaları koleksiyonuna yeni bir belge ekleyin
       userFavoriCollection.doc(userId).collection('favori_markalar').add(markaData)
           .then((value) {
@@ -137,8 +128,6 @@ class _TumMarkalarState extends State<TumMarkalar> {
       kategoriler.add('Hepsi');
       kategoriler.add(marka.kategori);
     }
-
-    //kategoriler = kategoriler.toList();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -173,15 +162,6 @@ class _TumMarkalarState extends State<TumMarkalar> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            // TextField(
-            //   controller: searchController,
-            //   onChanged: (value) {
-            //     setState(() {
-            //       searchText = value;
-            //     });
-            //   },
-            //   decoration: InputDecoration(labelText: 'Ara'),
-            // ),Row(
             Row(
               children: [
                 Expanded(
@@ -238,5 +218,4 @@ class _TumMarkalarState extends State<TumMarkalar> {
         addFavoriListToFirestore(userId, id);
       },);
   }
-
 }

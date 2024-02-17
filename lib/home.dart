@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:unipasaj/lists/markaList.dart';
 import 'favoriMarkalar.dart';
@@ -6,9 +5,6 @@ import 'profil.dart';
 import 'tumMarkalar.dart';
 
 class MyHomePage extends StatefulWidget {
-  //final User user;
-  //MyHomePage({required this.user});
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -22,6 +18,11 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     fetchMarkalarFromFirestore().then((markalar) {
       setState(() {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Giriş Yapıldı, Hoşgeldiniz...'),
+          ),
+        );
         _pages = [
           ExploreTab(),
           TumMarkalar(markalar: markalar),
@@ -44,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         body: _pages.isEmpty ? Center(child: CircularProgressIndicator()) : _pages[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
-          items: [
+          items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite_border, color: Colors.black),
               label: 'Favorilerim',
