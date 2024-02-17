@@ -6,8 +6,8 @@ import 'profil.dart';
 import 'tumMarkalar.dart';
 
 class MyHomePage extends StatefulWidget {
-  final User user;
-  MyHomePage({required this.user});
+  //final User user;
+  //MyHomePage({required this.user});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -25,12 +25,11 @@ class _MyHomePageState extends State<MyHomePage> {
         _pages = [
           ExploreTab(),
           TumMarkalar(markalar: markalar),
-          AyarlarEkrani(user: widget.user),
+          AyarlarEkrani(),
         ];
       });
     });
   }
-
 
   void _onItemTapped(int index) {
     setState(() {

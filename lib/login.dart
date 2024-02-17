@@ -267,7 +267,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => MyHomePage(user: user),
+          pageBuilder: (context, animation, secondaryAnimation) => MyHomePage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0.0);
             const end = Offset.zero;
@@ -314,7 +314,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
       Navigator.push(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => MyHomePage(user: user),
+          pageBuilder: (context, animation, secondaryAnimation) => MyHomePage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0.0);
             const end = Offset.zero;

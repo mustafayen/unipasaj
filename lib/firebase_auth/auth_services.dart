@@ -12,9 +12,6 @@ class FirebaseAuthService {
         email: email,
         password: password,
       );
-      // Send email verification
-      await credential.user?.sendEmailVerification();
-      _logger.info('Verification email sent to ${credential.user?.email}');
 
       return credential.user;
     } on FirebaseAuthException catch (e) {
