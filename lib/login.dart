@@ -347,7 +347,6 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
     }
   }
 
-
   Future resetPassword() async{
     await FirebaseAuth.instance.
     sendPasswordResetEmail(email: _emailController.text.trim());
@@ -360,4 +359,3 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
   }
 
 }
-

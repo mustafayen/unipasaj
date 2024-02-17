@@ -186,7 +186,13 @@ Card markaCard(
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: Colors.black54, // Arka plan rengi
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10), // Kenar yarıçapı
+                    ),
+                    textStyle: TextStyle(
+                      fontSize: 16, // Yazı tipi boyutu
+                    ),
                   ),
                   onPressed: () {
                     print("Kupon Kodu Al");
@@ -238,8 +244,12 @@ Card markaCard(
                       },
                     );
                   },
-                  child: Text('Kupon Kodu Al'),
+                  child: Text(
+                    'Kupon Kodu Al',
+                    style: TextStyle(color: Colors.white), // Yazı rengi
+                  ),
                 ),
+
                 IconButton(
                   onPressed: () {
                     // Harita butonunun işlevselliği buraya gelecek
