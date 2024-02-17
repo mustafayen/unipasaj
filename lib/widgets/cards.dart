@@ -14,7 +14,7 @@ final User? user = _auth.currentUser;
 // Mevcut kullanıcının UID'sini alın
 final String? userId = user?.uid;
 
-final String url = "https://www.google.com.tr/maps/place/%C4%B0stanbul+Teknik+%C3%9Cniversitesi/@41.1001844,29.0216411,14z/data=!4m6!3m5!1s0x14cab5c224b2ead7:0x4a28984b84971619!8m2!3d41.1055941!4d29.0253401!16zL20vMDM3bTRm?hl=tr&entry=ttu";
+final String url = "https://maps.app.goo.gl/x5yjQvFWSPZuGvP29";
 final Uri uri = Uri.parse(url);
 
 Future<String> fetchNameFromFirestore(String userId) async {
@@ -256,14 +256,6 @@ Card markaCard(
   );
 }
 
-void _launchURL2(String url) async {
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
-}
-
 void _launchURL(Uri url) async {
   if (await canLaunchUrl(url)) {
     await launchUrl(url);
@@ -271,8 +263,3 @@ void _launchURL(Uri url) async {
     throw 'Could not launch $url';
   }
 }
-
-
-
-
-
