@@ -103,6 +103,13 @@ class _ExploreTabState extends State<ExploreTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.search,
+            color: Colors.transparent, // Opaklık 0 olarak ayarlandı
+          ),
+          onPressed: () {},
+        ),
         title: Text(
           'Favorilerim',
           textAlign: TextAlign.center,

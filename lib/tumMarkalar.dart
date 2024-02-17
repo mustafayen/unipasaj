@@ -141,6 +141,15 @@ class _TumMarkalarState extends State<TumMarkalar> {
     //kategoriler = kategoriler.toList();
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.search,
+            color: Colors.transparent, // Opaklık 0 olarak ayarlandı
+          ),
+          onPressed: () {
+            // Buraya ikonun tıklanma işlemlerini ekleyebilirsiniz
+          },
+        ),
         title: Text('ÜNİPASAJ',
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -160,6 +169,7 @@ class _TumMarkalarState extends State<TumMarkalar> {
           ),
         ],
       ),
+
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[

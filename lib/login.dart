@@ -253,61 +253,53 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
-   if(user!=null){
+    if(user!=null){
 
-     await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
-       'name': name,
-       'surname': surname,
-       'email': email,
-       // Diğer kullanıcı bilgilerini buraya ekleyebilirsiniz
-     });
+      await FirebaseFirestore.instance.collection('users').doc(user!.uid).set({
+        'name': name,
+        'surname': surname,
+        'email': email,
+        // Diğer kullanıcı bilgilerini buraya ekleyebilirsiniz
+      });
 
       print("User is successfully created");
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder:
-              (context, animation, secondaryAnimation) =>
-              MyHomePage(user: user),
-          transitionsBuilder: (context, animation,
-              secondaryAnimation, child) {
+          pageBuilder: (context, animation, secondaryAnimation) => MyHomePage(user: user),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0.0);
             const end = Offset.zero;
             const curve = Curves.easeInOut;
-            var tween = Tween(begin: begin, end: end)
-                .chain(CurveTween(curve: curve));
+            var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
             var offsetAnimation = animation.drive(tween);
-            return SlideTransition(
-                position: offsetAnimation, child: child);
+            return SlideTransition(position: offsetAnimation, child: child);
           },
-          transitionDuration: Duration(
-              seconds:
-              1), // Set the duration here (1 second in this example)
+          transitionDuration: Duration(seconds: 1),
         ),
       );
-
     }
     else{
-     showDialog(
-       context: context,
-       builder: (BuildContext context) {
-         return AlertDialog(
-           title: Text("Sign-Up Failed"),
-           content: Text("Varolan bir hesap ile kayıt olmaya çalıştınız ya da internet bağlantısı yok. Tekrar deneyiniz."),
-           actions: [
-             TextButton(
-               onPressed: () {
-                 Navigator.pop(context);
-               },
-               child: Text("OK"),
-             ),
-           ],
-         );
-       },
-     );
-     _emailController.text = "";
-     _passwordController.text = "";
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Sign-Up Failed"),
+            content: Text("Varolan bir hesap ile kayıt olmaya çalıştınız ya da internet bağlantısı yok. Tekrar deneyiniz."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      _emailController.text = "";
+      _passwordController.text = "";
     }
   }
 

@@ -20,6 +20,13 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.search,
+            color: Colors.transparent, // Opaklık 0 olarak ayarlandı
+          ),
+          onPressed: () {},
+        ),
         title: Text('Hesap',
             textAlign: TextAlign.center,
             style: TextStyle(
