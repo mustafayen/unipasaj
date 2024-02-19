@@ -171,11 +171,22 @@ Card markaCard(
               ],
             ),
             Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-            SizedBox(
-              child: Image.asset(
-                imageurl,
-                width: double.infinity,
-              ),
+            FutureBuilder<String>(
+              future: getImageUrl(imageurl), // Resim URL'sini getir
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // Veri yüklenene kadar bekleyen durum
+                  return CircularProgressIndicator();
+                } else {
+                  if (snapshot.hasError) {
+                    // Hata durumu
+                    return Text('Resim yüklenirken bir hata oluştu: ${snapshot.error}');
+                  } else {
+                    // Veri başarıyla yüklendiği durum
+                    return snapshot.data != null ? Image.network(snapshot.data!) : SizedBox(); // Resim mevcutsa göster, değilse boş bir SizedBox göster
+                  }
+                }
+              },
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
