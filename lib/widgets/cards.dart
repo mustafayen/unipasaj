@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'paddings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+String imagePath = 'ae.jpg';
+
 // FirebaseAuth nesnesini oluşturun
 final FirebaseAuth _auth = FirebaseAuth.instance;
-
 // FirebaseAuth kullanarak mevcut kullanıcıyı alın
 final User? user = _auth.currentUser;
-
 // Mevcut kullanıcının UID'sini alın
 final String? userId = user?.uid;
 
@@ -21,7 +22,6 @@ Future<String> fetchNameFromFirestore(String userId) async {
   try {
     // Firestore kullanıcı koleksiyon referansını alın
     CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
-
     // Kullanıcının belgesini Firestore'dan al
     DocumentSnapshot userDoc = await userCollection.doc(userId).get();
 
@@ -53,9 +53,6 @@ Future<String> fetchNameFromFirestore(String userId) async {
   }
 }
 
-
-
-
 Card markaCard(
     String imageurl,
     String marka,
@@ -69,8 +66,7 @@ Card markaCard(
     context,
     Function(String, int) addFavoriFunction, // Yeni parametre
     ) {
-  bool isFavorited = false;
-  Icon favIcon = Icon(Icons.favorite_border, color: Colors.black);
+
   return Card(
     child: Container(
       child: Center(
@@ -200,7 +196,7 @@ Card markaCard(
                       context: context,
                       builder: (BuildContext context) {
                         return FutureBuilder<String>(
-                          future: fetchNameFromFirestore(userId!),
+                          future: fetchNameFromFirestore(userId!), // Firestore'dan diğer verileri getir
                           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                             if (snapshot.connectionState == ConnectionState.waiting) {
                               // Veri yüklenene kadar bekleyen durum
@@ -227,11 +223,26 @@ Card markaCard(
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        // Buraya QR kodu widget'i eklenebilir
+                                        // Resmi göstermek için Image.network widget'ını kullanın
                                         SizedBox(height: 20),
-                                        //Text("Yukarıdaki QR Kodu Tarat"),
                                         Text("İndirimi almak için telefonu görevliye gösterin."),
-                                        Text(snapshot.data ?? ''),
+                                        FutureBuilder<String>(
+                                          future: getImageUrl(imagePath), // Resim URL'sini getir
+                                          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                              // Veri yüklenene kadar bekleyen durum
+                                              return CircularProgressIndicator();
+                                            } else {
+                                              if (snapshot.hasError) {
+                                                // Hata durumu
+                                                return Text('Resim yüklenirken bir hata oluştu: ${snapshot.error}');
+                                              } else {
+                                                // Veri başarıyla yüklendiği durum
+                                                return snapshot.data != null ? Image.network(snapshot.data!) : SizedBox(); // Resim mevcutsa göster, değilse boş bir SizedBox göster
+                                              }
+                                            }
+                                          },
+                                        ),
                                         Text(user!.uid),
                                       ],
                                     ),
@@ -244,6 +255,7 @@ Card markaCard(
                       },
                     );
                   },
+
                   child: Text(
                     'Kupon Kodu Al',
                     style: TextStyle(color: Colors.white), // Yazı rengi
@@ -271,5 +283,22 @@ void _launchURL(Uri url) async {
     await launchUrl(url);
   } else {
     throw 'Could not launch $url';
+  }
+}
+
+Future<String> getImageUrl(String imagePath) async {
+  try {
+    // Firebase Storage referansını oluşturun
+    Reference ref = FirebaseStorage.instance.ref(imagePath);
+
+    // Resmin indirme URL'sini alın
+    String imageUrl = await ref.getDownloadURL();
+
+    // İndirme URL'sini döndürün
+    return imageUrl;
+  } catch (e) {
+    // Hata durumunda bir hata mesajı döndürün
+    print('Hata oluştu: $e');
+    return Future.error('Resim yüklenirken bir hata oluştu: $e');
   }
 }

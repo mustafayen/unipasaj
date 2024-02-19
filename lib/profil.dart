@@ -70,7 +70,8 @@ class _AyarlarEkraniState extends State<AyarlarEkrani> {
                           ),
                         ),
                         onTap: () {},
-                        trailing: Icon(Icons.navigate_next)),
+                        //trailing: Icon(Icons.navigate_next)
+                      ),
                     Divider(),
                     ListTile(
                         title: Text(

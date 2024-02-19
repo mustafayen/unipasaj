@@ -151,7 +151,7 @@ class _TumMarkalarState extends State<TumMarkalar> {
         backgroundColor: Colors.white,
         actions: [
           IconButton(
-            icon: Icon(Icons.search, color: Colors.black),
+            icon: Icon(Icons.search, color: Colors.transparent),
             onPressed: () {
               //showSearch(context: context, delegate: AramaDelegate());
             },

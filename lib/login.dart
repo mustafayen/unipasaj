@@ -261,6 +261,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
         // Diğer kullanıcı bilgilerini buraya ekleyebilirsiniz
       });
       print("User is successfully created");
+
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
