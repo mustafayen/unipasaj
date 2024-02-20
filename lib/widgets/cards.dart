@@ -7,14 +7,12 @@ import 'paddings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 String imagePath = 'ae.jpg';
-
 // FirebaseAuth nesnesini oluşturun
 final FirebaseAuth _auth = FirebaseAuth.instance;
 // FirebaseAuth kullanarak mevcut kullanıcıyı alın
 final User? user = _auth.currentUser;
 // Mevcut kullanıcının UID'sini alın
 final String? userId = user?.uid;
-
 final String url = "https://maps.app.goo.gl/x5yjQvFWSPZuGvP29";
 final Uri uri = Uri.parse(url);
 
@@ -31,7 +29,6 @@ Future<String> fetchNameFromFirestore(String userId) async {
       if (userData != null) {
         String? name = userData['name'];
         String? surname = userData['surname'];
-
         if (name != null && surname != null) {
           String adSoyad = '$name $surname';
           return adSoyad;
@@ -66,7 +63,6 @@ Card markaCard(
     context,
     Function(String, int) addFavoriFunction, // Yeni parametre
     ) {
-
   return Card(
     child: Container(
       child: Center(
@@ -277,13 +273,11 @@ Card markaCard(
                       },
                     );
                   },
-
                   child: Text(
                     'Kupon Kodu Al',
                     style: TextStyle(color: Colors.white), // Yazı rengi
                   ),
                 ),
-
                 IconButton(
                   onPressed: () {
                     // Harita butonunun işlevselliği buraya gelecek
@@ -312,10 +306,8 @@ Future<String> getImageUrl(String imagePath) async {
   try {
     // Firebase Storage referansını oluşturun
     Reference ref = FirebaseStorage.instance.ref(imagePath);
-
     // Resmin indirme URL'sini alın
     String imageUrl = await ref.getDownloadURL();
-
     // İndirme URL'sini döndürün
     return imageUrl;
   } catch (e) {
