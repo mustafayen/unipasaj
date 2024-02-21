@@ -1,20 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'paddings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-String imagePath = 'ae.jpg';
 // FirebaseAuth nesnesini oluşturun
 final FirebaseAuth _auth = FirebaseAuth.instance;
 // FirebaseAuth kullanarak mevcut kullanıcıyı alın
 final User? user = _auth.currentUser;
 // Mevcut kullanıcının UID'sini alın
 final String? userId = user?.uid;
-final String url = "https://maps.app.goo.gl/x5yjQvFWSPZuGvP29";
-final Uri uri = Uri.parse(url);
+//final String mapUrl = "https://maps.app.goo.gl/x5yjQvFWSPZuGvP29";
 
 Future<String> fetchNameFromFirestore(String userId) async {
   try {
@@ -25,7 +22,6 @@ Future<String> fetchNameFromFirestore(String userId) async {
 
     if (userDoc.exists) {
       Map<String, dynamic>? userData = userDoc.data() as Map<String, dynamic>?;
-
       if (userData != null) {
         String? name = userData['name'];
         String? surname = userData['surname'];
@@ -51,6 +47,7 @@ Future<String> fetchNameFromFirestore(String userId) async {
 }
 
 Card markaCard(
+    String mapurl,
     String imageurl,
     String marka,
     String indirim,
@@ -63,6 +60,8 @@ Card markaCard(
     context,
     Function(String, int) addFavoriFunction, // Yeni parametre
     ) {
+  final Uri uri = Uri.parse(mapurl);
+
   return Card(
     child: Container(
       child: Center(
@@ -179,7 +178,7 @@ Card markaCard(
             ),
             Padding(padding: EdgeInsets.symmetric(vertical: 10)),
             FutureBuilder<String>(
-              future: getImageUrl(imageurl), // Resim URL'sini getir
+              future: getImageUrl(logoUrl), // Resim URL'sini getir
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   // Veri yüklenene kadar bekleyen durum
@@ -245,7 +244,7 @@ Card markaCard(
                                         SizedBox(height: 20),
                                         Text("İndirimi almak için telefonu görevliye gösterin."),
                                         FutureBuilder<String>(
-                                          future: getImageUrl(imagePath), // Resim URL'sini getir
+                                          future: getImageUrl(imageurl), // Resim URL'sini getir
                                           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                                             if (snapshot.connectionState == ConnectionState.waiting) {
                                               // Veri yüklenene kadar bekleyen durum

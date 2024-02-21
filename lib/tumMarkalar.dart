@@ -53,6 +53,7 @@ class _TumMarkalarState extends State<TumMarkalar> {
       // Her belgeyi döngüye alarak favori marka nesnelerini oluştur
       querySnapshot.docs.forEach((doc) {
         Marka marka = Marka(
+          doc['mapurl'],
           doc['id'],
           doc['imagePath'],
           doc['name'],
@@ -213,7 +214,7 @@ class _TumMarkalarState extends State<TumMarkalar> {
   }
 
   Widget markaCard1(Marka marka) {
-    return markaCard(marka.imagePath, marka.name, marka.discount,
+    return markaCard(marka.mapurl, marka.imagePath, marka.name, marka.discount,
         marka.description, marka.date, marka.logoPath, marka.kategori, marka.id, Colors.black, context, (userId, id) {
         addFavoriListToFirestore(userId, id);
       },);

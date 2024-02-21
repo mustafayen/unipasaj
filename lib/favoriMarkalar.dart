@@ -42,6 +42,7 @@ class _ExploreTabState extends State<ExploreTab> {
       List<Marka> markalar = [];
       querySnapshot.docs.forEach((doc) {
         Marka marka = Marka(
+          doc['mapurl'],
           doc['id'],
           doc['imagePath'],
           doc['name'],
@@ -116,6 +117,7 @@ class _ExploreTabState extends State<ExploreTab> {
             Column(
               children: favoriMarkalar.map((marka) {
                 return markaCard(
+                  marka.mapurl,
                   marka.imagePath,
                   marka.name,
                   marka.discount,

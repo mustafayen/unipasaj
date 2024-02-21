@@ -16,6 +16,7 @@ Future<List<Marka>> fetchMarkalarFromFirestore() async {
   // Her belgeyi döngüye alarak Marka nesnelerini oluşturun
   querySnapshot.docs.forEach((doc) {
     Marka marka = Marka(
+      doc['mapurl'],
       doc['id'],
       doc['imagePath'],
       doc['name'],
