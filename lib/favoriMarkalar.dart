@@ -8,6 +8,7 @@ class ExploreTab extends StatefulWidget {
   @override
   _ExploreTabState createState() => _ExploreTabState();
 }
+
 class _ExploreTabState extends State<ExploreTab> {
   late List<Marka> favoriMarkalar = [];
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,6 +19,7 @@ class _ExploreTabState extends State<ExploreTab> {
     super.initState();
     fetchUserData();
   }
+
   void fetchUserData() async {
     user = _auth.currentUser;
     if (user != null) {
@@ -32,7 +34,7 @@ class _ExploreTabState extends State<ExploreTab> {
     try {
       // Firestore kullanıcı favori markaları koleksiyon referansını al
       CollectionReference userFavoriCollection =
-      FirebaseFirestore.instance.collection('favori');
+          FirebaseFirestore.instance.collection('favori');
       // Kullanıcının favori markalarını Firestore'dan al
       QuerySnapshot querySnapshot = await userFavoriCollection
           .doc(userId)
@@ -67,7 +69,8 @@ class _ExploreTabState extends State<ExploreTab> {
   Future removeFavoriListFromFirestore(String userId, int id) async {
     try {
       // Firestore kullanıcı favori markaları koleksiyon referansını alın
-      CollectionReference userFavoriCollection = FirebaseFirestore.instance.collection('favori');
+      CollectionReference userFavoriCollection =
+          FirebaseFirestore.instance.collection('favori');
       // Koleksiyondan markayı kaldır
       await userFavoriCollection
           .doc(userId)
@@ -128,9 +131,9 @@ class _ExploreTabState extends State<ExploreTab> {
                   marka.id,
                   Colors.red,
                   context,
-                      (userId, id) {
+                  (userId, id) {
                     // Favori ekleme işlevini tanımla
-                        removeFavoriListFromFirestore(userId, id);
+                    removeFavoriListFromFirestore(userId, id);
                   },
                 );
               }).toList(),

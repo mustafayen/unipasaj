@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:unipasaj/widgets/home/home_card.dart';
 import 'widgets/cards.dart';
 import 'class/markaClass.dart';
 import 'lists/markaList.dart';
@@ -47,9 +48,13 @@ class _TumMarkalarState extends State<TumMarkalar> {
 
     try {
       // Firestore kullanıcı favori markaları koleksiyon referansını alın
-      CollectionReference userFavoriCollection = FirebaseFirestore.instance.collection('favori');
+      CollectionReference userFavoriCollection =
+          FirebaseFirestore.instance.collection('favori');
       // Kullanıcının favori markalarını Firestore'dan al
-      QuerySnapshot querySnapshot = await userFavoriCollection.doc(userId).collection('favori_markalar').get();
+      QuerySnapshot querySnapshot = await userFavoriCollection
+          .doc(userId)
+          .collection('favori_markalar')
+          .get();
       // Her belgeyi döngüye alarak favori marka nesnelerini oluştur
       querySnapshot.docs.forEach((doc) {
         Marka marka = Marka(
@@ -80,7 +85,8 @@ class _TumMarkalarState extends State<TumMarkalar> {
     List<Marka> markalarFromFirestore = await fetchMarkalarFromFirestore();
     List<Marka> allmarkaList = markalarFromFirestore;
     // Firestore kullanıcı favori markaları koleksiyon referansını alın
-    CollectionReference userFavoriCollection = FirebaseFirestore.instance.collection('favori');
+    CollectionReference userFavoriCollection =
+        FirebaseFirestore.instance.collection('favori');
     // Marka zaten favorilere eklenmişse işlemi sonlandır
     if (isMarkaAlreadyFavorited(favoriMarkalar, id)) {
       print('Bu marka zaten favorilere eklenmiş.');
@@ -107,11 +113,13 @@ class _TumMarkalarState extends State<TumMarkalar> {
         'kategori': markaToAdd.kategori,
       };
       // Kullanıcının favori markaları koleksiyonuna yeni bir belge ekleyin
-      userFavoriCollection.doc(userId).collection('favori_markalar').add(markaData)
+      userFavoriCollection
+          .doc(userId)
+          .collection('favori_markalar')
+          .add(markaData)
           .then((value) {
         print("Marka başarıyla eklendi.");
-      })
-          .catchError((error) {
+      }).catchError((error) {
         print("Marka eklenirken hata oluştu: $error");
       });
     } else {
@@ -159,7 +167,6 @@ class _TumMarkalarState extends State<TumMarkalar> {
           ),
         ],
       ),
-
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -214,9 +221,20 @@ class _TumMarkalarState extends State<TumMarkalar> {
   }
 
   Widget markaCard1(Marka marka) {
-    return markaCard(marka.mapurl, marka.imagePath, marka.name, marka.discount,
-        marka.description, marka.date, marka.logoPath, marka.kategori, marka.id, Colors.black, context, (userId, id) {
+    return HomeCard(
+      marka.mapurl,
+      marka.imagePath,
+      marka.name,
+      marka.discount,
+      marka.description,
+      marka.date,
+      marka.logoPath,
+      marka.kategori,
+      marka.id,
+      Colors.black,
+      (userId, id) {
         addFavoriListToFirestore(userId, id);
-      },);
+      },
+    );
   }
 }

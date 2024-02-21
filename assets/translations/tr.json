@@ -1,0 +1,18 @@
+{
+    "appName":"UNİWİNNER",
+    "emailFieldHint":"E posta adresiniz:",
+    "passwordFieldHint":"Şifreniz:",
+    "loginButtonText":"Giriş",
+    "forgotPasswordButtonText":"Şifremi Unuttum",
+    "loginPageTitle":"Giriş Yap",
+    "orText":"veya",
+    "signUpButtonText":"Kayıt Ol",
+    "nameFieldHint":"Adınız:",
+    "surnameFieldHint":"Soyadınız:",
+    "alreadyHaveAccountText":"Zaten bir hesabınız var mı?",
+    "takeCupponCode":"Kupon Kodu Al",
+    "shareCode":"Kodu Paylaş"
+    
+    
+
+}

@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unipasaj/firebase_auth/sign_in_provider.dart';
+import 'package:unipasaj/theme/app_theme.dart';
 import 'firebase_options.dart';
 import 'opening.dart';
 
@@ -11,7 +13,13 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    runApp(MyApp());
+    await EasyLocalization.ensureInitialized();
+    runApp(EasyLocalization(
+      child: MyApp(),
+      supportedLocales: const [Locale('tr')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('tr'),
+    ));
   } catch (error) {
     print("Error initializing Firebase: $error");
   }
@@ -24,7 +32,11 @@ class MyApp extends StatelessWidget {
       create: (context) => EmailSignInProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        theme: AppTheme.light(),
         home: Home(),
+        locale: context.locale,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
       ),
     );
   }

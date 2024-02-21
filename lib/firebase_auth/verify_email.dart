@@ -9,6 +9,8 @@ class VerifyEmailPage extends StatefulWidget {
   State<VerifyEmailPage> createState() => _VerifyEmailPageState();
 }
 
+//NOT: Register olduktan sonra verification yaptıktan sonra, logout olup tekrar login olunca app crash attı
+
 class _VerifyEmailPageState extends State<VerifyEmailPage> {
   bool isEmailVerified = false;
   Timer? timer;
@@ -16,14 +18,14 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   @override
   void initState() {
     super.initState();
-    isEmailVerified=FirebaseAuth.instance.currentUser!.emailVerified;
+    isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
 
-    if(!isEmailVerified){
+    if (!isEmailVerified) {
       sendVerificationEmail();
 
       Timer.periodic(
         Duration(seconds: 3),
-          (_) => checkEmailVerified(),
+        (_) => checkEmailVerified(),
       );
     }
   }
@@ -38,13 +40,13 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     //call after email verification
     await FirebaseAuth.instance.currentUser!.reload();
     setState(() {
-      isEmailVerified=FirebaseAuth.instance.currentUser!.emailVerified;
+      isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     });
-    if(isEmailVerified) timer?.cancel();
+    if (isEmailVerified) timer?.cancel();
   }
 
-  void sendVerificationEmail() async{
-    final user=FirebaseAuth.instance.currentUser!;
+  void sendVerificationEmail() async {
+    final user = FirebaseAuth.instance.currentUser!;
     await user.sendEmailVerification();
   }
 
@@ -60,18 +62,21 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('email doğrulama linki e-posta adresinize iletilmiştir.',
+                Text(
+                  'email doğrulama linki e-posta adresinize iletilmiştir.',
                   style: TextStyle(fontSize: 20),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 ElevatedButton.icon(
-                    onPressed: sendVerificationEmail,
-                    icon: Icon(Icons.email),
-                    label: Text("Tekrar mail gönderin"),
+                  onPressed: sendVerificationEmail,
+                  icon: Icon(Icons.email),
+                  label: Text("Tekrar mail gönderin"),
                 ),
               ],
             ),
           ),
-      );
+        );
 }
