@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:unipasaj/widgets/future_image.dart';
 import 'package:unipasaj/widgets/home/home_card.dart';
+import 'package:unipasaj/widgets/marka_image.dart';
 import 'widgets/cards.dart';
 import 'class/markaClass.dart';
 import 'lists/markaList.dart';
@@ -104,6 +106,7 @@ class _TumMarkalarState extends State<TumMarkalar> {
       // Marka verilerini bir belgeye dönüştürün
       Map<String, dynamic> markaData = {
         'id': markaToAdd.id,
+        'mapurl': markaToAdd.mapurl,
         'imagePath': markaToAdd.imagePath,
         'name': markaToAdd.name,
         'discount': markaToAdd.discount,
@@ -201,6 +204,7 @@ class _TumMarkalarState extends State<TumMarkalar> {
                 ),
               ],
             ),
+            MarkaHikaye(markaList: markaList),
             Column(
               children: markaList.where((marka) {
                 if (searchText == "Hepsi" || searchText == "") {
@@ -222,6 +226,7 @@ class _TumMarkalarState extends State<TumMarkalar> {
 
   Widget markaCard1(Marka marka) {
     return HomeCard(
+      marka,
       marka.mapurl,
       marka.imagePath,
       marka.name,
@@ -235,6 +240,50 @@ class _TumMarkalarState extends State<TumMarkalar> {
       (userId, id) {
         addFavoriListToFirestore(userId, id);
       },
+    );
+  }
+}
+
+class MarkaHikaye extends StatelessWidget {
+  const MarkaHikaye({
+    super.key,
+    required this.markaList,
+  });
+
+  final List<Marka> markaList;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 100,
+      child: ListView.builder(
+        itemCount: markaList.length,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: const Offset(0, 2), // changes position of shadow
+                ),
+              ],
+            ),
+            child: SizedBox(
+              width: 60,
+              child: MarkaImage(
+                marka: markaList[index],
+                isCircular: true,
+                future: getImageUrl(markaList[index].imagePath),
+              ),
+            ),
+          );
+        },
+        scrollDirection: Axis.horizontal,
+      ),
     );
   }
 }

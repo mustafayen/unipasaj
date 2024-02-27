@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:unipasaj/class/markaClass.dart';
 import 'package:unipasaj/extensions/context_extensions.dart';
 import 'package:unipasaj/extensions/string_extensions.dart';
 import 'package:unipasaj/localization/locale_keys.g.dart';
 import 'package:unipasaj/widgets/cards.dart';
-import 'package:unipasaj/widgets/future_image.dart';
+import 'package:unipasaj/widgets/marka_image.dart';
 
 class UPBottomModalHelper {
-  static void showCupponModal(BuildContext context, String imageurl) {
+  //TODO: MARKA FOTOSUNUN ÜST KISMINA BASINCA TIKLAMAYI ALGILAMIYOR.
+  static void showCupponModal(
+      BuildContext context, String imageurl, Marka marka) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -43,7 +46,8 @@ class UPBottomModalHelper {
                       Positioned(
                         top: -60,
                         left: context.width * 0.05,
-                        child: FutureImage(
+                        child: MarkaImage(
+                          marka: marka,
                           future: getImageUrl(imageurl),
                           isCircular: true,
                         ),

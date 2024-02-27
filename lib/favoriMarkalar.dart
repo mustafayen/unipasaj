@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unipasaj/class/markaClass.dart';
+import 'package:unipasaj/tumMarkalar.dart';
 import 'package:unipasaj/widgets/cards.dart';
+import 'package:unipasaj/widgets/future_image.dart';
+import 'package:unipasaj/widgets/home/home_card.dart';
 
 class ExploreTab extends StatefulWidget {
   @override
@@ -117,9 +120,13 @@ class _ExploreTabState extends State<ExploreTab> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            MarkaHikaye(
+              markaList: favoriMarkalar,
+            ),
             Column(
               children: favoriMarkalar.map((marka) {
-                return markaCard(
+                return HomeCard(
+                  marka,
                   marka.mapurl,
                   marka.imagePath,
                   marka.name,
@@ -130,7 +137,6 @@ class _ExploreTabState extends State<ExploreTab> {
                   marka.kategori,
                   marka.id,
                   Colors.red,
-                  context,
                   (userId, id) {
                     // Favori ekleme işlevini tanımla
                     removeFavoriListFromFirestore(userId, id);

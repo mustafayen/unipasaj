@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:unipasaj/class/markaClass.dart';
 import 'package:unipasaj/extensions/context_extensions.dart';
 import 'package:unipasaj/extensions/string_extensions.dart';
 import 'package:unipasaj/helpers/bottom_modal_helper.dart';
 import 'package:unipasaj/localization/locale_keys.g.dart';
 import 'package:unipasaj/widgets/cards.dart';
 import 'package:unipasaj/widgets/future_image.dart';
+import 'package:unipasaj/widgets/marka_image.dart';
 import 'package:unipasaj/widgets/paddings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeCard extends StatelessWidget {
   const HomeCard(
+    this.markaModel,
     this.mapurl,
     this.imageurl,
     this.marka,
@@ -23,6 +26,7 @@ class HomeCard extends StatelessWidget {
     this.addFavoriFunction, {
     super.key,
   });
+  final Marka markaModel;
   final String mapurl;
   final String imageurl;
   final String marka;
@@ -58,7 +62,10 @@ class HomeCard extends StatelessWidget {
                         height: 50,
                         color: Colors.blue,
                         child: Center(
-                            child: FutureImage(future: getImageUrl(logoUrl))),
+                            child: MarkaImage(
+                          future: getImageUrl(logoUrl),
+                          marka: markaModel,
+                        )),
                       ),
                     ),
                     const verhorPadding(),
@@ -154,7 +161,8 @@ class HomeCard extends StatelessWidget {
                       ),
                       onPressed: () {
                         print("Kupon Kodu Al");
-                        UPBottomModalHelper.showCupponModal(context, imageurl);
+                        UPBottomModalHelper.showCupponModal(
+                            context, imageurl, markaModel);
                       },
                       child: Text(
                         LocaleKeys.takeCupponCode.translate,
@@ -190,7 +198,8 @@ class HomeCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 height: 200,
-                child: FutureImage(
+                child: MarkaImage(
+                  marka: markaModel,
                   future: getImageUrl(logoUrl),
                   fit: BoxFit.fitWidth,
                 ),

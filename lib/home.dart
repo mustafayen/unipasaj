@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:unipasaj/extensions/string_extensions.dart';
+import 'package:unipasaj/pages/discover/kesfet.dart';
 import 'package:unipasaj/lists/markaList.dart';
+import 'package:unipasaj/localization/locale_keys.g.dart';
 import 'favoriMarkalar.dart';
 import 'profil.dart';
 import 'tumMarkalar.dart';
@@ -26,6 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _pages = [
           ExploreTab(),
           TumMarkalar(markalar: markalar),
+          const Kesfet(),
           AyarlarEkrani(),
         ];
       });
@@ -43,9 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        body: _pages.isEmpty ? Center(child: CircularProgressIndicator()) : _pages[_selectedIndex],
+        body: _pages.isEmpty
+            ? Center(child: CircularProgressIndicator())
+            : _pages[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
-          items: const [
+          items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite_border, color: Colors.black),
               label: 'Favorilerim',
@@ -53,6 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
             BottomNavigationBarItem(
               icon: Icon(Icons.all_inclusive, color: Colors.black),
               label: 'Tüm Markalar',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search, color: Colors.black),
+              label: LocaleKeys.discover.translate,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outline, color: Colors.black),

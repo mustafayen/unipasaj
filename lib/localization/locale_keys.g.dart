@@ -14,5 +14,6 @@ abstract class  LocaleKeys {
   static const alreadyHaveAccountText = 'alreadyHaveAccountText';
   static const takeCupponCode = 'takeCupponCode';
   static const shareCode = 'shareCode';
+  static const discover = 'discover';
 
 }

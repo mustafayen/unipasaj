@@ -4,10 +4,15 @@ import 'package:unipasaj/extensions/context_extensions.dart';
 
 class FutureImage extends StatefulWidget {
   const FutureImage(
-      {super.key, required this.future, this.fit, this.isCircular = false});
+      {super.key,
+      required this.future,
+      this.fit,
+      this.isCircular = false,
+      this.onFutureLoaded});
   final Future<String> future;
   final BoxFit? fit;
   final bool isCircular;
+  final Function(String?)? onFutureLoaded;
 
   @override
   State<FutureImage> createState() => _FutureImageState();
@@ -33,6 +38,7 @@ class _FutureImageState extends State<FutureImage> {
             // Hata durumu
             return Text('Resim yüklenirken bir hata oluştu: ${snapshot.error}');
           } else {
+            widget.onFutureLoaded?.call(snapshot.data!);
             // Veri başarıyla yüklendiği durum
             return snapshot.data != null
                 ? widget.isCircular

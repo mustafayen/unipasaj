@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unipasaj/firebase_auth/sign_in_provider.dart';
+import 'package:unipasaj/pages/discover/kesfet_page_view_model.dart';
 import 'package:unipasaj/theme/app_theme.dart';
 import 'firebase_options.dart';
 import 'opening.dart';
@@ -28,12 +29,15 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => EmailSignInProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => EmailSignInProvider()),
+        ChangeNotifierProvider(create: (context) => KesfetPageViewModel()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light(),
-        home: Home(),
+        home: const Home(),
         locale: context.locale,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
