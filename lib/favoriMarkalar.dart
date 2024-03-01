@@ -17,6 +17,8 @@ class _ExploreTabState extends State<ExploreTab> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late User? user;
   late String? userId;
+
+
   @override
   void initState() {
     super.initState();
@@ -97,6 +99,7 @@ class _ExploreTabState extends State<ExploreTab> {
       print("Favori markaları kaldırırken hata oluştu: $e");
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

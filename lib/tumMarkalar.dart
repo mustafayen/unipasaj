@@ -81,52 +81,28 @@ class _TumMarkalarState extends State<TumMarkalar> {
   }
 
   void addFavoriListToFirestore(String userId, int id) async {
-    // Favori markaları Firestore'dan al
-    List<Marka> favoriMarkalar = await fetchFavoriMarkalarFromFirestore(userId);
-    // Firestore'dan gelen verilerle markaları al
-    List<Marka> markalarFromFirestore = await fetchMarkalarFromFirestore();
-    List<Marka> allmarkaList = markalarFromFirestore;
-    // Firestore kullanıcı favori markaları koleksiyon referansını alın
-    CollectionReference userFavoriCollection =
-        FirebaseFirestore.instance.collection('favori');
-    // Marka zaten favorilere eklenmişse işlemi sonlandır
-    if (isMarkaAlreadyFavorited(favoriMarkalar, id)) {
-      print('Bu marka zaten favorilere eklenmiş.');
-      return;
-    }
-    // Favorilere eklemek için marka verilerini bul
-    Marka? markaToAdd;
-    for (var marka in allmarkaList) {
-      if (marka.id == id) {
-        markaToAdd = marka;
-        break;
+    if (userId.isNotEmpty) {
+      // Firestore'dan markaları almak için bir işlev çağırılıyor
+      List<Marka> markalarFromFirestore = await fetchMarkalarFromFirestore();
+
+      // Markalar listesinde istenilen markayı bulmak için döngü kullanılıyor
+      for (int i = 0; i < markalarFromFirestore.length; i++) {
+        if (markalarFromFirestore[i].id == id) {
+          // Eklenen markanın sadece id'sini alıyoruz
+          int eklenenMarkaId = markalarFromFirestore[i].id;
+
+          // Firebase Firestore'a marka id'sini eklemek için kullanılan kod
+          await FirebaseFirestore.instance.collection('users').doc(userId).update({
+            'favoriler': FieldValue.arrayUnion([eklenenMarkaId])
+          });
+          print('Marka favorilere eklendi: $eklenenMarkaId');
+          return; // İstenilen marka bulunduğunda işlemi sonlandır
+        }
       }
-    }
-    if (markaToAdd != null) {
-      // Marka verilerini bir belgeye dönüştürün
-      Map<String, dynamic> markaData = {
-        'id': markaToAdd.id,
-        'mapurl': markaToAdd.mapurl,
-        'imagePath': markaToAdd.imagePath,
-        'name': markaToAdd.name,
-        'discount': markaToAdd.discount,
-        'description': markaToAdd.description,
-        'date': markaToAdd.date,
-        'logoPath': markaToAdd.logoPath,
-        'kategori': markaToAdd.kategori,
-      };
-      // Kullanıcının favori markaları koleksiyonuna yeni bir belge ekleyin
-      userFavoriCollection
-          .doc(userId)
-          .collection('favori_markalar')
-          .add(markaData)
-          .then((value) {
-        print("Marka başarıyla eklendi.");
-      }).catchError((error) {
-        print("Marka eklenirken hata oluştu: $error");
-      });
+      // İstenilen marka bulunamadığında hata mesajı yazdır
+      print('Marka bulunamadı: $id');
     } else {
-      print('Marka bulunamadı.');
+      print('Kullanıcı kimliği boş olamaz');
     }
   }
 
