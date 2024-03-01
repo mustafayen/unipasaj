@@ -27,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         );
         _pages = [
-          ExploreTab(),
+          ExploreTab(markalar: markalar),
           TumMarkalar(markalar: markalar),
           const Kesfet(),
           AyarlarEkrani(),

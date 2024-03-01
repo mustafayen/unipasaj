@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:unipasaj/widgets/future_image.dart';
 import 'package:unipasaj/widgets/home/home_card.dart';
 import 'package:unipasaj/widgets/marka_image.dart';
 import 'widgets/cards.dart';
@@ -21,7 +20,7 @@ class _TumMarkalarState extends State<TumMarkalar> {
   String searchText = "";
   Set<String> kategoriler = Set();
 
-  late List<Marka> favoriMarkalar = [];
+  //late List<Marka> favoriMarkalar = [];
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late User? user;
   late String? userId;
@@ -45,40 +44,6 @@ class _TumMarkalarState extends State<TumMarkalar> {
     }
   }
 
-  Future<List<Marka>> fetchFavoriMarkalarFromFirestore(String userId) async {
-    List<Marka> favoriMarkalar = [];
-
-    try {
-      // Firestore kullanıcı favori markaları koleksiyon referansını alın
-      CollectionReference userFavoriCollection =
-          FirebaseFirestore.instance.collection('favori');
-      // Kullanıcının favori markalarını Firestore'dan al
-      QuerySnapshot querySnapshot = await userFavoriCollection
-          .doc(userId)
-          .collection('favori_markalar')
-          .get();
-      // Her belgeyi döngüye alarak favori marka nesnelerini oluştur
-      querySnapshot.docs.forEach((doc) {
-        Marka marka = Marka(
-          doc['mapurl'],
-          doc['id'],
-          doc['imagePath'],
-          doc['name'],
-          doc['discount'],
-          doc['description'],
-          doc['date'],
-          doc['logoPath'],
-          doc['kategori'],
-        );
-        favoriMarkalar.add(marka);
-      });
-
-      return favoriMarkalar;
-    } catch (e) {
-      print("Favori markaları çekerken hata oluştu: $e");
-      return favoriMarkalar;
-    }
-  }
 
   void addFavoriListToFirestore(String userId, int id) async {
     if (userId.isNotEmpty) {

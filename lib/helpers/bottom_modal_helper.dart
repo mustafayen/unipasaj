@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:unipasaj/class/markaClass.dart';
 import 'package:unipasaj/extensions/context_extensions.dart';
 import 'package:unipasaj/extensions/string_extensions.dart';
+import 'package:unipasaj/favoriMarkalar.dart';
 import 'package:unipasaj/localization/locale_keys.g.dart';
 import 'package:unipasaj/widgets/cards.dart';
 import 'package:unipasaj/widgets/marka_image.dart';
@@ -13,31 +14,6 @@ class UPBottomModalHelper {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return FutureBuilder<String>(
-          future: fetchNameFromFirestore(
-              userId!), // Firestore'dan diğer verileri getir
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              // Veri yüklenene kadar bekleyen durum
-              return SizedBox(
-                height: MediaQuery.of(context).size.height * 0.5,
-                child: const Center(
-                  child:
-                      CircularProgressIndicator(), // veya başka bir yükleme göstergesi
-                ),
-              );
-            } else {
-              if (snapshot.hasError) {
-                // Hata durumu
-                return SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: Center(
-                    child: Text(
-                        'Veri yüklenirken bir hata oluştu: ${snapshot.error}'),
-                  ),
-                );
-              } else {
-                // Veri başarıyla yüklendiği durum
                 return SizedBox(
                   height: MediaQuery.of(context).size.height * 0.7,
                   child: Stack(
@@ -72,7 +48,31 @@ class UPBottomModalHelper {
                                   )
                                 ]),
 
-                            const SizedBox(height: 20),
+                            FutureBuilder<String>(
+                              future: fetchNameFromFirestore(userId!),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<String> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  // Veri yüklenene kadar bekleyen durum
+                                  return CircularProgressIndicator();
+                                } else {
+                                  if (snapshot.hasError) {
+                                    // Hata durumu
+                                    return Text(
+                                        'İsim yüklenirken bir hata oluştu: ${snapshot.error}');
+                                  } else {
+                                    // Veri başarıyla yüklendiği durum
+                                    return snapshot.data != null
+                                        ? Text(
+                                        snapshot.data!)
+                                        : SizedBox(); // Resim mevcutsa göster, değilse boş bir SizedBox göster
+                                  }
+                                }
+                              },
+                            ),
+
+                            const SizedBox(height: 10),
                             Padding(
                               padding: const EdgeInsets.all(8),
                               child: Column(
@@ -85,7 +85,8 @@ class UPBottomModalHelper {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 20),
+
+                            const SizedBox(height: 10),
                             const Divider(),
                             Expanded(
                               child: SingleChildScrollView(
@@ -101,21 +102,19 @@ class UPBottomModalHelper {
                                         ),
                                         const SizedBox(height: 8),
                                         const Text(
-                                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."),
+                                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                                        ),
                                       ],
                                     )),
                               ),
                             ),
+
                           ],
                         ),
                       ),
                     ],
                   ),
                 );
-              }
-            }
-          },
-        );
       },
     );
   }

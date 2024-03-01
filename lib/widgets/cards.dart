@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'paddings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
 
 // FirebaseAuth nesnesini oluşturun
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -46,6 +47,8 @@ Future<String> fetchNameFromFirestore(String userId) async {
     return ''; // veya istediğiniz bir varsayılan değer
   }
 }
+
+
 
 Card markaCard(
   String mapurl,
@@ -221,35 +224,6 @@ Card markaCard(
                     showModalBottomSheet(
                       context: context,
                       builder: (BuildContext context) {
-                        return FutureBuilder<String>(
-                          future: fetchNameFromFirestore(
-                              userId!), // Firestore'dan diğer verileri getir
-                          builder: (BuildContext context,
-                              AsyncSnapshot<String> snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              // Veri yüklenene kadar bekleyen durum
-                              return Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.5,
-                                child: Center(
-                                  child:
-                                      CircularProgressIndicator(), // veya başka bir yükleme göstergesi
-                                ),
-                              );
-                            } else {
-                              if (snapshot.hasError) {
-                                // Hata durumu
-                                return Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.5,
-                                  child: Center(
-                                    child: Text(
-                                        'Veri yüklenirken bir hata oluştu: ${snapshot.error}'),
-                                  ),
-                                );
-                              } else {
-                                // Veri başarıyla yüklendiği durum
                                 return Container(
                                   height:
                                       MediaQuery.of(context).size.height * 0.5,
@@ -258,6 +232,31 @@ Card markaCard(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
+
+                                        FutureBuilder<String>(
+                                          future: fetchNameFromFirestore(userId!),
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<String> snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              // Veri yüklenene kadar bekleyen durum
+                                              return CircularProgressIndicator();
+                                            } else {
+                                              if (snapshot.hasError) {
+                                                // Hata durumu
+                                                return Text(
+                                                    'İsim yüklenirken bir hata oluştu: ${snapshot.error}');
+                                              } else {
+                                                // Veri başarıyla yüklendiği durum
+                                                return snapshot.data != null
+                                                    ? Text(
+                                                    snapshot.data!)
+                                                    : SizedBox(); // Resim mevcutsa göster, değilse boş bir SizedBox göster
+                                              }
+                                            }
+                                          },
+                                        ),
+
                                         // Resmi göstermek için Image.network widget'ını kullanın
                                         SizedBox(height: 20),
                                         Text(
@@ -286,15 +285,11 @@ Card markaCard(
                                             }
                                           },
                                         ),
-                                        Text(user!.uid),
+                                           Text(user!.uid),
                                       ],
                                     ),
                                   ),
                                 );
-                              }
-                            }
-                          },
-                        );
                       },
                     );
                   },
