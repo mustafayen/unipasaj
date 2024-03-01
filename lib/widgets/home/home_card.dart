@@ -43,7 +43,6 @@ class HomeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Uri uri = Uri.parse(mapurl);
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: Card(
@@ -60,7 +59,7 @@ class HomeCard extends StatelessWidget {
                       child: Container(
                         width: 50,
                         height: 50,
-                        color: Colors.blue,
+                        color: Colors.transparent,
                         child: Center(
                             child: MarkaImage(
                           future: getImageUrl(logoUrl),
