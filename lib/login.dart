@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:unipasaj/extensions/context_extensions.dart';
 import 'package:unipasaj/extensions/string_extensions.dart';
 import 'package:unipasaj/firebase_auth/auth_services.dart';
+import 'package:unipasaj/firebase_auth/verify_email.dart';
 import 'package:unipasaj/home.dart';
 import 'package:unipasaj/localization/locale_keys.g.dart';
 import 'package:unipasaj/widgets/auth/auth_common_card.dart';
@@ -374,7 +375,7 @@ class _LoggedInWidgetState extends State<LoggedInWidget>
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => MyHomePage(),
+          pageBuilder: (context, animation, secondaryAnimation) => VerifyEmailPage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0.0);
             const end = Offset.zero;
