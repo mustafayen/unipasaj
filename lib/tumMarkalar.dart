@@ -178,7 +178,7 @@ class _TumMarkalarState extends State<TumMarkalar> {
       marka.kategori,
       marka.id,
       Colors.black,
-      (userId, id) {
+          (userId, id) {
         addFavoriListToFirestore(userId, id);
       },
     );

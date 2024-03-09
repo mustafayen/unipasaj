@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:unipasaj/firebase_auth/sign_in_provider.dart';
 import 'package:unipasaj/home.dart';
+import 'package:unipasaj/login.dart';
 
 class VerifyEmailPage extends StatefulWidget {
   const VerifyEmailPage({super.key});
@@ -75,6 +78,15 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                   icon: Icon(Icons.email),
                   label: Text("Tekrar mail gönderin"),
                 ),
+                ElevatedButton(onPressed: (){
+                  final provider = Provider.of<EmailSignInProvider>(
+                  context, listen: false);
+                  provider.signOut();
+                  Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoggedInWidget()));
+                  },
+                    child: Text("Çıkış yap"))
               ],
             ),
           ),
